@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using dotnet_bugtrackerapi.Data;
 using dotnet_bugtrackerapi.Services.BreakageService;
+using dotnet_bugtrackerapi.Services.TestService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,7 @@ namespace dotnet_bugtrackerapi
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IBreakageService, BreakageService>();
+            services.AddScoped<ITestService, TestService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,8 +9,8 @@ using dotnet_bugtrackerapi.Data;
 namespace dotnet_bugtrackerapi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200927142321_initial")]
-    partial class initial
+    [Migration("20200927160307_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,12 @@ namespace dotnet_bugtrackerapi.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TestId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TestId");
 
                     b.ToTable("Breakages");
 
@@ -39,13 +44,22 @@ namespace dotnet_bugtrackerapi.Migrations
                         {
                             Id = 1,
                             BreakageReason = "Timeout Exception",
-                            Date = new DateTime(2020, 9, 27, 16, 23, 21, 683, DateTimeKind.Local).AddTicks(2875)
+                            Date = new DateTime(2020, 9, 27, 18, 3, 7, 550, DateTimeKind.Local).AddTicks(806),
+                            TestId = 1
                         },
                         new
                         {
                             Id = 2,
                             BreakageReason = "Stale Element Exception",
-                            Date = new DateTime(2020, 9, 27, 16, 23, 21, 683, DateTimeKind.Local).AddTicks(3540)
+                            Date = new DateTime(2020, 9, 27, 18, 3, 7, 550, DateTimeKind.Local).AddTicks(1690),
+                            TestId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BreakageReason = "Stale Element Exception",
+                            Date = new DateTime(2020, 9, 27, 18, 3, 7, 550, DateTimeKind.Local).AddTicks(1730),
+                            TestId = 1
                         });
                 });
 
@@ -76,16 +90,50 @@ namespace dotnet_bugtrackerapi.Migrations
                         {
                             Id = 1,
                             BreakageId = 1,
-                            Date = new DateTime(2020, 9, 27, 16, 23, 21, 678, DateTimeKind.Local).AddTicks(4413),
+                            Date = new DateTime(2020, 9, 27, 18, 3, 7, 545, DateTimeKind.Local).AddTicks(6089),
                             HowFixed = "Added wait"
                         },
                         new
                         {
                             Id = 2,
                             BreakageId = 2,
-                            Date = new DateTime(2020, 9, 27, 16, 23, 21, 682, DateTimeKind.Local).AddTicks(1284),
+                            Date = new DateTime(2020, 9, 27, 18, 3, 7, 548, DateTimeKind.Local).AddTicks(9753),
                             HowFixed = "Updated CSS Selector"
                         });
+                });
+
+            modelBuilder.Entity("dotnet_bugtrackerapi.Models.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsBroken")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsBroken = true,
+                            Name = "Test A"
+                        });
+                });
+
+            modelBuilder.Entity("dotnet_bugtrackerapi.Models.Breakage", b =>
+                {
+                    b.HasOne("dotnet_bugtrackerapi.Models.Test", "Test")
+                        .WithMany("Breakages")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("dotnet_bugtrackerapi.Models.Fix", b =>

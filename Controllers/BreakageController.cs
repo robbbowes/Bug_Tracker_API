@@ -16,7 +16,7 @@ namespace dotnet_bugtrackerapi.Controllers
 
         public BreakageController(IBreakageService breakagesService)
         {
-            this._breakagesService = breakagesService;
+            _breakagesService = breakagesService;
         }
 
         [HttpPost]

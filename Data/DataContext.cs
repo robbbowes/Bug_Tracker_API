@@ -9,7 +9,7 @@ namespace dotnet_bugtrackerapi.Data
 
         public DbSet<Fix> Fixes { get; set; }
         public DbSet<Breakage> Breakages { get; set; }
-
+        public DbSet<Test> Tests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Fix>().HasData(
@@ -18,8 +18,13 @@ namespace dotnet_bugtrackerapi.Data
             );
 
             modelBuilder.Entity<Breakage>().HasData(
-                new Breakage { Id = 1, BreakageReason = "Timeout Exception" },
-                new Breakage { Id = 2, BreakageReason = "Stale Element Exception" }
+                new Breakage { Id = 1, BreakageReason = "Timeout Exception", TestId = 1 },
+                new Breakage { Id = 2, BreakageReason = "Stale Element Exception", TestId = 1 },
+                new Breakage { Id = 3, BreakageReason = "Stale Element Exception", TestId = 1 }
+            );
+
+            modelBuilder.Entity<Test>().HasData(
+                new Test { Id = 1, Name = "Test A", IsBroken = true }
             );
         }
     }
